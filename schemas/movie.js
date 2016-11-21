@@ -25,6 +25,7 @@ var MovieSchema = new mongoose.Schema({
 //添加方法 所用的方法都必须要经过model层的调用才能使
 // 每回改变都会重新调用一遍save方法
 MovieSchema.pre('save', function(next){
+	//判断是否为新添加的数据
 	if(this.isNew){
 		this.meta.createAt = this.meta.updateAt = Date.now()
 	}else{
