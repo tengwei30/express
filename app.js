@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var _ = require('underscore')
+var _ = require('underscore');
 var Movie = require('./models/movie');
 var port = process.env.PORT || 3000;	//端口  process是全局的
 var app = express();
@@ -15,18 +15,16 @@ mongoose.connect('mongodb://localhost/movie');
 app.set('views','./views/pages');	//设置views根目录
 app.set('view engine','jade');	//设置模版引擎
 app.use(bodyParser()); //用来格式化表单数据的
-app.use(express.static(path.join(__dirname, 'node_modules')));//设置样式去哪加载，__dirname表示当前目录
+app.use(express.static(path.join(__dirname, 'public')));//设置样式去哪加载，__dirname表示当前目录
 app.locals.moment = require('moment');
 app.listen(port);
 
 console.log('process started on port'+port);
 
-
-
 //index page 路由设置
 app.get('/',function(req,res){
-	//调用schemas里里面的方法啦  通过models里面的model编译生成的函数调用
-	Movie.fetch(function(err,movies){
+	//调用schemas里里面的方法啦   通过models里面的model编译生成的函数调用
+	Movie.fetch(function(err, movies){
 		if(err){
 			console.log("错误信息:"+err);
 		}
@@ -35,7 +33,6 @@ app.get('/',function(req,res){
 			 movies: movies
 		})
 	})
-	
 })
 
 // detail
@@ -86,11 +83,13 @@ app.get('/admin/movie',function(req,res){
 })
 
 //update movie
-app.get('/admin/movie/:id',function(req,res){
+app.get('/admin/update/:id',function(req,res){
 	var id = req.params.id;
-
 	if(id){
 		Movie.findById(id,function(err,movie){
+			if(err){
+				console.log("错误信息:"+err);
+			}
 			res.render('admin',{
 				title: 'movie 后台更新页',
 				movie:movie
@@ -116,7 +115,7 @@ app.post('/admin/movie/new',function(req,res){
 					console.log("错误信息:"+err);	
 				}
 				//返回  成功后重新刷新
-				res.redirect('/movie' + movie._id);
+				res.redirect('movie/' + movie._id);
 			})
 		})
 	}else{
@@ -134,12 +133,24 @@ app.post('/admin/movie/new',function(req,res){
 			if(err){
 				console.log("错误信息:"+err);
 			}
-			res.redirect('/movie' + movie._id);
+			res.redirect('/movie/' + movie._id);
+		})
+	} 	
+})
+
+//DELETE
+app.delete('/admin/list',function(req,res) {
+	var id = req.query.id;
+	if(id){
+		Movie.remove({_id:id}, function(err,movie) {
+			if(err){
+				console.log("错误信息:"+err)
+			}else{
+				res.json({success: 1})
+			}
 		})
 	}
 })
-
-
 
 
 
