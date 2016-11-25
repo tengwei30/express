@@ -138,14 +138,20 @@ app.post('/admin/movie/new',function(req,res){
 	} 	
 })
 
-//DELETE
-app.delete('/admin/list',function(req,res) {
+//DELETE movie
+app.delete('/admin/list', function(req,res) {
+			//查找id
 	var id = req.query.id;
+	//express 获取http参数的三种方式 
+	//1、req.params  例如：127.0.0.1:3000/index，这种情况下，我们为了得到index
+	//2、req.query   例如：127.0.0.1:3000/index?id=12，这种情况下，这种方式是获取客户端get方式传递过来的值，通过使用req.query.id就可以获得，类似于PHP的get方法；
+	//3、req.body    例如：127.0.0.1：300/index，然后post了一个id=2的值，这种方式是获取客户端post过来的数据，可以通过req.body.id获取，类似于PHP的post方法；
 	if(id){
 		Movie.remove({_id:id}, function(err,movie) {
 			if(err){
 				console.log("错误信息:"+err)
 			}else{
+				//给客户端返回一个json数据
 				res.json({success: 1})
 			}
 		})

@@ -1,5 +1,14 @@
-# express
-	#用express+jade+mongoose做一个前后端都用的练手网站
-	#前端的架构用bootstrap进行布局
-	#npm install express jade moment bootstrap body-parser mongoose
-	#mongod --config /usr/local/etc/mongod.conf  Mac启动mongodb
+# 滕伟个人项目练习
+
+------
+
+## 注意点
+
+> 1.使用express、jade、mongoDB开发
+> 2.使用中需要安装mongoDB数据库，并建一个movie表
+> 3. Mac下启mongo mongod --config /usr/local/etc/mongod.conf
+
+
+## 参考
+> * [express获取http的三种方式](http://blog.csdn.net/dan_blog/article/details/7463291)
+	
