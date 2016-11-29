@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 var Movie = require('./models/movie');
+var User = require('./models/user');
 var port = process.env.PORT || 3000;	//端口  process是全局的
 var app = express();
 
@@ -49,6 +50,46 @@ app.get('/movie/:id',function(req,res){
 			movie: movie
 		})
 	})	
+})
+
+
+//来取注册信息
+app.post('/user/signup',function(req,res) {
+	var _user = req.body.user;
+	
+	User.find({name: _user.name},function(err, user) {
+		if(err){
+			console.log("错误信息:"+err);
+		}
+		if(user){
+			return res.redirect('/');
+		}else{
+			var user = new User(_user);
+			user.save(function(err,user) {
+				if(err){
+					console.log("错误信息:"+err);
+				}
+					//重定向,想当于成功后到哪个界面
+				res.redirect('/');
+			})
+		}
+	})
+	
+})
+
+
+//userlist
+app.get('/admin/userlist',function(req,res){
+	User.fetch(function(err,users){
+		if(err){
+			console.log("错误信息:"+err);
+		}
+		res.render('userlist',{
+			title:'userlist 用户列表页',
+			users: users
+		})
+	})
+	
 })
 
 // list
