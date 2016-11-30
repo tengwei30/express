@@ -45,6 +45,18 @@ UserSchema.pre('save', function(next){
 	next() //加next程序才会走下去
 })
 
+//添加实例方法
+UserSchema.methods = {
+	comparePassword: function(_password,cb) {
+		bcrypt.compare(_password,this.password,null,function(err,isMatch) {
+			if(err) return cb(err);
+
+			cb(null,isMatch);
+		})
+	}
+}
+
+
 //添加个静态方法
 UserSchema.statics = {
 
